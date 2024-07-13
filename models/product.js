@@ -53,4 +53,26 @@ module.exports = class Product {
      cb(product)
    })
   }
+  static deleteProduct(id,cb){
+    let arr=[]
+    fs.readFile(p,(err,data)=>{
+         if(err){
+          return cb()
+         }
+         try {
+          arr=JSON.parse(data)
+         } catch (error) {
+          console.log(error)
+         }
+         let newarr=arr.filter((prod)=>{
+          prod.id!=id
+         })
+         fs.writeFile(p,JSON.stringify(newarr),(err)=>{
+          if(err){
+         cb()
+          }
+            cb()
+         })
+    })
+  }
 };

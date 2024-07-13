@@ -20,8 +20,9 @@ module.exports = class Cart {
         } catch (error) {
           console.log(err);
         }
+        let updatedProd
         const existingProdidx = cart.products.findIndex((prod) => id === prod.id);
-        if (existingProdidx) {
+        if (existingProdidx!=-1) {
           updatedProd = { ...cart.products[existingProdidx]};
           updatedProd.qty = updatedProd.qty + 1;
           cart.products=[...cart.products]
@@ -29,10 +30,10 @@ module.exports = class Cart {
           
         } else {
             updatedProd={id:id,qty:1}
-            cart.products=[...cart.products,updatedProd]
+            cart.products.push(updatedProd)
         }
         cart.totalPrice=cart.totalPrice+ +prodPrice
-        fs.writeFile(p,JSON.stringify(cart),(err)=>console.log(err))
+        fs.writeFile(p,JSON.stringify(cart),(err)=>{if(err)console.log(err)})
         
       }
     });
