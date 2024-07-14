@@ -2,7 +2,7 @@ const path = require('path');
 
 const express = require('express');
 const bodyParser = require('body-parser');
-
+const db=require("./util/database")
 const errorController = require('./controllers/error');
 
 const app = express();
@@ -16,6 +16,11 @@ const shopRoutes = require('./routes/shop');
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, 'public')));
+
+
+db.execute("SELECT * FROM Products")
+.then((data)=>console.log(data))
+.catch((err)=>console.log("Error While Connecting To Database..."))
 
 app.use('/admin', adminRoutes);
 app.use(shopRoutes);
