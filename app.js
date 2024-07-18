@@ -6,7 +6,8 @@ const sequelize = require("./util/database");
 const errorController = require("./controllers/error");
 const User = require("./models/user");
 const Product = require("./models/product");
-
+const Cart=require('./models/cart')
+const CartItem=require('./models/cartitem')
 const app = express();
 
 
@@ -22,6 +23,11 @@ app.use((req,res,next)=>{
 
 Product.belongsTo(User, { constraints: true, onDelete: "Cascade" });
 User.hasMany(Product);
+User.hasOne(Cart)
+Cart.belongsTo(User)
+Cart.belongsToMany(Product,{through:CartItem})
+Product.belongsToMany(Cart,{through:CartItem})
+
 
 sequelize
   .sync()
@@ -39,6 +45,7 @@ sequelize
     return Promise.resolve(user);
   })
   .then((user)=>{
+   return user.createCart()
    console.log(user)
   })
   .catch((err) => console.log("Error connecting to database ", err));
